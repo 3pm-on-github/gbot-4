@@ -48,6 +48,8 @@ async def on_message(msg):
     global channelidthing
     if msg.content == 'g4:ping':
         await msg.channel.send('Pong!')
+    elif msg.content == 'g4:help':
+        await msg.channel.send('***---Logs commands---***\ng4:bilt: Activates/Deactivates bots in logs.\ng4:setlogschnlid: Sets logs channel id\n***---Other commands---***\ng4:ping: What can happen... :thinking:\ng4:help: Shows this message')
     elif msg.content == 'g4:bilt':
         global nobotsinlogs
         if nobotsinlogs == False:
@@ -65,6 +67,5 @@ async def on_message(msg):
         await msg.channel.send('Channel id succesfully set.')
     elif not channelidthing == 0:
         await newlogsline(msg, format(msg.author.name))
-        
 
 bot.run(token=str(private['token']))
