@@ -17,7 +17,7 @@ channelidthing = 0
 
 async def newlogsline(messagethingidk, messageauthor):
     global channelidthing
-    channel = discord.guild.Guild.get_channel(messagethingidk.guild, channelidthing)
+    channel = bot.get_channel(channelidthing)
     global nobotsinlogs
     if not messageauthor == 'GBot 4':
         if nobotsinlogs == True:
@@ -27,7 +27,7 @@ async def newlogsline(messagethingidk, messageauthor):
                 againnowthing = nowthing.strftime("%H:%M:%S")
                 messagecontent = str(messagethingidk.content)
                 encodedmessagecontent = messagecontent.encode("utf-8")
-                logs = open('C:\\Users\\pooki\\OneDrive\\Bureau\\Codes\\GBot 4\\logs.txt', "a")
+                logs = open('logs.txt', "a")
                 logs.write(f'{todaything.strftime("%d/%m/%Y")} at {againnowthing}: @{messageauthor} said {encodedmessagecontent} in channel <#{messagethingidk.channel.id}> in {messagethingidk.guild.name}.\n') #type: ignore
                 logs.close()
                 await channel.send(f'{todaything.strftime("%d/%m/%Y")} at {againnowthing}: @{messageauthor} said {encodedmessagecontent} in channel <#{messagethingidk.channel.id}> in {messagethingidk.guild.name}.')
@@ -37,7 +37,7 @@ async def newlogsline(messagethingidk, messageauthor):
             againnowthing = nowthing.strftime("%H:%M:%S")
             messagecontent = str(messagethingidk.content)
             encodedmessagecontent = messagecontent.encode("utf-8")
-            logs = open('C:\\Users\\pooki\\OneDrive\\Bureau\\Codes\\GBot 4\\logs.txt', "a")
+            logs = open('logs.txt', "a")
             logs.write(f'{todaything.strftime("%d/%m/%Y")} at {againnowthing}: @{messageauthor} said {encodedmessagecontent} in channel <#{messagethingidk.channel.id}> in {messagethingidk.guild.name}.\n') #type: ignore
             logs.close()
             await channel.send(f'{todaything.strftime("%d/%m/%Y")} at {againnowthing}: @{messageauthor} said {encodedmessagecontent} in channel <#{messagethingidk.channel.id}> in {messagethingidk.guild.name}.')
@@ -46,10 +46,9 @@ async def newlogsline(messagethingidk, messageauthor):
 async def on_message(msg):
     global typeinchannelidthing
     global channelidthing
-    await newlogsline(msg, format(msg.author.name))
     if msg.content == 'g4:ping':
         await msg.channel.send('Pong!')
-    if msg.content == 'g4:bilt':
+    elif msg.content == 'g4:bilt':
         global nobotsinlogs
         if nobotsinlogs == False:
             nobotsinlogs = True
@@ -57,12 +56,15 @@ async def on_message(msg):
         elif nobotsinlogs == True:
             nobotsinlogs = False
             await msg.channel.send('Bots in logs are now activated!')
-    if msg.content == 'g4:setlogschnlid':
+    elif msg.content == 'g4:setlogschnlid':
         await msg.channel.send('Please type your channel id.')
         typeinchannelidthing = True
-    if typeinchannelidthing == True:
+    elif typeinchannelidthing == True:
         typeinchannelidthing = False
-        channelidthing = msg.content
+        channelidthing = int(msg.content)
         await msg.channel.send('Channel id succesfully set.')
+    elif not channelidthing == 0:
+        await newlogsline(msg, format(msg.author.name))
+        
 
 bot.run(token=str(private['token']))
