@@ -160,4 +160,3 @@ cython_debug/
 #.idea/
 private.json
 logs.txt
-.gitignore
