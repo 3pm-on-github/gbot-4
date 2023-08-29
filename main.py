@@ -28,9 +28,9 @@ async def newlogsline(messagethingidk, messageauthor):
                 messagecontent = str(messagethingidk.content)
                 encodedmessagecontent = messagecontent.encode("utf-8")
                 logs = open('logs.txt', "a")
-                logs.write(f'{todaything.strftime("%d/%m/%Y")} at {againnowthing}: @{messageauthor} said {encodedmessagecontent} in channel <#{messagethingidk.channel.id}> in {messagethingidk.guild.name}.\n') #type: ignore
+                logs.write(f'{todaything.strftime("%d/%m/%Y")} at {againnowthing}: {messageauthor} said {encodedmessagecontent} in channel <#{messagethingidk.channel.id}> in {messagethingidk.guild.name}.\n') #type: ignore
                 logs.close()
-                await channel.send(f'{todaything.strftime("%d/%m/%Y")} at {againnowthing}: @{messageauthor} said {encodedmessagecontent} in channel <#{messagethingidk.channel.id}> in {messagethingidk.guild.name}.')
+                await channel.send(f'{todaything.strftime("%d/%m/%Y")} at {againnowthing}: {messageauthor} said {encodedmessagecontent} in channel <#{messagethingidk.channel.id}> in {messagethingidk.guild.name}.')
         elif nobotsinlogs == False:
             todaything = date.today()
             nowthing = datetime.datetime.now()
@@ -38,9 +38,9 @@ async def newlogsline(messagethingidk, messageauthor):
             messagecontent = str(messagethingidk.content)
             encodedmessagecontent = messagecontent.encode("utf-8")
             logs = open('logs.txt', "a")
-            logs.write(f'{todaything.strftime("%d/%m/%Y")} at {againnowthing}: @{messageauthor} said {encodedmessagecontent} in channel <#{messagethingidk.channel.id}> in {messagethingidk.guild.name}.\n') #type: ignore
+            logs.write(f'{todaything.strftime("%d/%m/%Y")} at {againnowthing}: {messageauthor} said {encodedmessagecontent} in channel <#{messagethingidk.channel.id}> in {messagethingidk.guild.name}.\n') #type: ignore
             logs.close()
-            await channel.send(f'{todaything.strftime("%d/%m/%Y")} at {againnowthing}: @{messageauthor} said {encodedmessagecontent} in channel <#{messagethingidk.channel.id}> in {messagethingidk.guild.name}.')
+            await channel.send(f'{todaything.strftime("%d/%m/%Y")} at {againnowthing}: {messageauthor} said {encodedmessagecontent} in channel <#{messagethingidk.channel.id}> in {messagethingidk.guild.name}.')
 
 @bot.event
 async def on_message(msg):
