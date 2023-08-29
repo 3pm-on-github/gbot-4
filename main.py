@@ -50,6 +50,11 @@ async def on_message(msg):
         await msg.channel.send('Pong!')
     elif msg.content == 'g4:help':
         await msg.channel.send('***---Logs commands---***\ng4:bilt: Activates/Deactivates bots in logs.\ng4:setlogschnlid: Sets logs channel id\n***---Other commands---***\ng4:ping: What can happen... :thinking:\ng4:help: Shows this message')
+    elif msg.content == 'g4:ownercmds':
+        if msg.author.id == 932666698438418522:
+            await msg.author.send('***---Owner commands---***\nComing soon!')
+        else:
+            await msg.channel.send('bro tried to fool me, did u know atleast that the owner can see the logs of every single servers with the bot in it?')
     elif msg.content == 'g4:bilt':
         global nobotsinlogs
         if nobotsinlogs == False:
