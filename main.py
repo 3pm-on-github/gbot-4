@@ -5,6 +5,7 @@ from datetime import date
 import json
 import datetime
 import time
+import random
 
 bot = commands.Bot('qsdvsqvdgiuodsngvuodsgvobdugtvbqsdfyuqdscbso', intents=discord.Intents.all())
 bot.remove_command('help')
@@ -28,9 +29,9 @@ async def newlogsline(messagethingidk, messageauthor):
                 messagecontent = str(messagethingidk.content)
                 encodedmessagecontent = messagecontent.encode("utf-8")
                 logs = open('logs.txt', "a")
-                logs.write(f'{todaything.strftime("%d/%m/%Y")} at {againnowthing}: {messageauthor} said {encodedmessagecontent} in channel <#{messagethingidk.channel.id}> in {messagethingidk.guild.name}.\n') #type: ignore
+                logs.write(f'{todaything.strftime("%d/%m/%Y")} at {againnowthing}: @{messageauthor} said {encodedmessagecontent} in channel <#{messagethingidk.channel.id}> in {messagethingidk.guild.name}.\n') #type: ignore
                 logs.close()
-                await channel.send(f'{todaything.strftime("%d/%m/%Y")} at {againnowthing}: {messageauthor} said {encodedmessagecontent} in channel <#{messagethingidk.channel.id}> in {messagethingidk.guild.name}.')
+                await channel.send(f'{todaything.strftime("%d/%m/%Y")} at {againnowthing}: @{messageauthor} said ``{encodedmessagecontent}`` in channel <#{messagethingidk.channel.id}> in {messagethingidk.guild.name}.')
         elif nobotsinlogs == False:
             todaything = date.today()
             nowthing = datetime.datetime.now()
@@ -38,9 +39,9 @@ async def newlogsline(messagethingidk, messageauthor):
             messagecontent = str(messagethingidk.content)
             encodedmessagecontent = messagecontent.encode("utf-8")
             logs = open('logs.txt', "a")
-            logs.write(f'{todaything.strftime("%d/%m/%Y")} at {againnowthing}: {messageauthor} said {encodedmessagecontent} in channel <#{messagethingidk.channel.id}> in {messagethingidk.guild.name}.\n') #type: ignore
+            logs.write(f'{todaything.strftime("%d/%m/%Y")} at {againnowthing}: @{messageauthor} said {encodedmessagecontent} in channel <#{messagethingidk.channel.id}> in {messagethingidk.guild.name}.\n') #type: ignore
             logs.close()
-            await channel.send(f'{todaything.strftime("%d/%m/%Y")} at {againnowthing}: {messageauthor} said {encodedmessagecontent} in channel <#{messagethingidk.channel.id}> in {messagethingidk.guild.name}.')
+            await channel.send(f'{todaything.strftime("%d/%m/%Y")} at {againnowthing}: @{messageauthor} said ``{encodedmessagecontent}`` in channel <#{messagethingidk.channel.id}> in {messagethingidk.guild.name}.')
 
 @bot.event
 async def on_message(msg):
@@ -48,8 +49,21 @@ async def on_message(msg):
     global channelidthing
     if msg.content == 'g4:ping':
         await msg.channel.send('Pong!')
+    elif msg.content == 'g4:dice':
+        number = random.randint(1, 6)
+        await msg.channel.send(f':game_die:{number}')
+    elif msg.content == 'g4:hazard':
+        await msg.channel.send(f'Please take your time and choose what happens when we get red, orange, yellow, green or blue. You have 30 seconds.')
+        time.sleep(30)
+        colors = [":red_square:",":orange_square:",":yellow_square:",":green_square:",":blue_square:"]
+        number1 = random.randint(1, 5)
+        number2 = random.randint(1, 5)
+        number3 = random.randint(1, 5)
+        number4 = random.randint(1, 5)
+        number5 = random.randint(1, 5)
+        await msg.channel.send(f'Lets play now!\n1: ||{colors[number1]}||\n2: ||{colors[number2]}||\n3:||{colors[number3]}||\n4: ||{colors[number4]}||\n5: ||{colors[number5]}||')
     elif msg.content == 'g4:help':
-        await msg.channel.send('***---Logs commands---***\ng4:bilt: Activates/Deactivates bots in logs.\ng4:setlogschnlid: Sets logs channel id\n***---Other commands---***\ng4:ping: What can happen... :thinking:\ng4:help: Shows this message')
+        await msg.channel.send('***---Logs commands---***\ng4:bilt: Activates/Deactivates bots in logs.\ng4:setlogschnlid: Sets logs channel id\n***---Other commands---***\ng4:ping: What can happen... :thinking:\ng4:help: Shows this message\ng4:ownercmds: owner commands, ask gachaytb3ondc for access.\n***---Games---***\ng4:dice: roll a dice!\ng4:hazard: Play a game of hazard!')
     elif msg.content == 'g4:ownercmds':
         if msg.author.id == 932666698438418522:
             await msg.author.send('***---Owner commands---***\nComing soon!')
