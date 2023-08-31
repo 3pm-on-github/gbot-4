@@ -9,7 +9,7 @@ import random
 
 bot = commands.Bot('qsdvsqvdgiuodsngvuodsgvobdugtvbqsdfyuqdscbso', intents=discord.Intents.all())
 bot.remove_command('help')
-privat = open('C:\\Users\\pooki\\OneDrive\\Bureau\\Codes\\GBot 4\\private.json', "r")
+privat = open('private.json', "r")
 jsondata = privat.read()
 private = json.loads(jsondata)
 typeinguessthingidk = False
@@ -67,8 +67,17 @@ async def on_message(msg):
     elif msg.content == 'g4:guesser':
         await msg.channel.send('Guess a number between 1 and 10 and then type it in the chat.')
         typeinguessthingidk = True
+    elif msg.content == 'g4:finishit':
+        letters = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
+        letternumber = random.randint(0, 25)
+        await msg.channel.send("I'll send a letter and you gotta finish the word.")
+        await msg.channel.send(f'Your letter is: {letters[letternumber]}')
+    elif msg.content == 'g4:meme':
+        memes = ['https://images-ext-1.discordapp.net/external/QchH2ZOuOszJr45uACciZA2RLWMXmP_3-BklURJ41oc/https/media.tenor.com/on1mjVGlxUgAAAPo/oh-the-misery-oh-the-misery-everybody-wants-to-be-my-enemy.mp4','https://www.youtube.com/shorts/G_r3_XwoU1A',"https://www.youtube.com/shorts/MhW-q_rU5xI","https://www.youtube.com/shorts/OdA-Gl9DkLI","https://www.youtube.com/shorts/kuJ8GoUEZKM"]
+        memenumber = random.randint(0, len(memes) - 1)
+        await msg.channel.send(memes[memenumber])
     elif msg.content == 'g4:help':
-        await msg.channel.send('***---Logs commands---***\ng4:bilt: Activates/Deactivates bots in logs.\ng4:setlogschnlid: Sets logs channel id\n***---Other commands---***\ng4:ping: What can happen... :thinking:\ng4:help: Shows this message\ng4:ownercmds: owner commands, ask gachaytb3ondc for access.\n***---Games---***\ng4:dice: roll a dice!\ng4:hazard: Play a game of hazard!\ng4:guesser: Guess a number between 1 and 10 and try to get the same number that the bot guessed!')
+        await msg.channel.send('***---Logs commands---***\ng4:bilt: Activates/Deactivates bots in logs.\ng4:setlogschnlid: Sets logs channel id\n***---Other commands---***\ng4:meme: Posts a random meme\ng4:ping: What can happen... :thinking:\ng4:help: Shows this message\ng4:ownercmds: owner commands, ask gachaytb3ondc for access.\n***---Games---***\ng4:dice: roll a dice!\ng4:hazard: Play a game of hazard!\ng4:guesser: Guess a number between 1 and 10 and try to get the same number that the bot guessed!\ng4:finishit: find out yourself...')
     elif msg.content == 'g4:ownercmds':
         if msg.author.id == 932666698438418522:
             await msg.author.send('***---Owner commands---***\nComing soon!')
