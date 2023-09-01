@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 from datetime import datetime
 from datetime import date
+# from music_cog import music_cog
 import json
 import datetime
 import time
@@ -10,6 +11,7 @@ import random
 bot = commands.Bot('qsdvsqvdgiuodsngvuodsgvobdugtvbqsdfyuqdscbso', intents=discord.Intents.all())
 bot.remove_command('help')
 privat = open('private.json', "r")
+# bot.add_cog(music_cog(bot))
 jsondata = privat.read()
 private = json.loads(jsondata)
 typeinguessthingidk = False
