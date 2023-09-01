@@ -21,7 +21,8 @@ channelidthing = 0
 
 async def newlogsline(messagethingidk, messageauthor):
     global channelidthing
-    channel = bot.get_channel(channelidthing)
+    if channelidthing != 0:
+        channel = bot.get_channel(channelidthing)
     global nobotsinlogs
     if not messageauthor == 'GBot 4':
         if nobotsinlogs == True:
