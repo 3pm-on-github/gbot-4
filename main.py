@@ -58,11 +58,11 @@ async def on_message(msg):
         await msg.channel.send(f'Please take your time and choose what happens when we get red, orange, yellow, green or blue. You have 30 seconds.')
         time.sleep(30)
         colors = [":red_square:",":orange_square:",":yellow_square:",":green_square:",":blue_square:"]
-        number1 = random.randint(1, 5)
-        number2 = random.randint(1, 5)
-        number3 = random.randint(1, 5)
-        number4 = random.randint(1, 5)
-        number5 = random.randint(1, 5)
+        number1 = random.randint(0, 4)
+        number2 = random.randint(0, 4)
+        number3 = random.randint(0, 4)
+        number4 = random.randint(0, 4)
+        number5 = random.randint(0, 4)
         await msg.channel.send(f'Lets play now!\n1: ||{colors[number1]}||\n2: ||{colors[number2]}||\n3:||{colors[number3]}||\n4: ||{colors[number4]}||\n5: ||{colors[number5]}||')
     elif msg.content == 'g4:guesser':
         await msg.channel.send('Guess a number between 1 and 10 and then type it in the chat.')
