@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 from datetime import datetime
 from datetime import date
+from gbotapilauncheretc import setup
 # from music_cog import music_cog
 import json
 import datetime
@@ -17,7 +18,11 @@ private = json.loads(jsondata)
 typeinguessthingidk = False
 nobotsinlogs = False
 typeinchannelidthing = False
-channelidthing = 0
+channelidthing = 1144614402625110126
+botthingidklol = open('botthingidklol.txt', "w")
+botthingidklol.write(str(bot))
+botthingidklol.close()
+setup(gbotverthing='0.0.9')
 
 async def newlogsline(messagethingidk, messageauthor):
     global channelidthing
