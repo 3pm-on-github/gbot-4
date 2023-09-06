@@ -84,6 +84,8 @@ async def on_message(msg):
         memes = ['https://images-ext-1.discordapp.net/external/QchH2ZOuOszJr45uACciZA2RLWMXmP_3-BklURJ41oc/https/media.tenor.com/on1mjVGlxUgAAAPo/oh-the-misery-oh-the-misery-everybody-wants-to-be-my-enemy.mp4','https://www.youtube.com/shorts/G_r3_XwoU1A',"https://www.youtube.com/shorts/MhW-q_rU5xI","https://www.youtube.com/shorts/OdA-Gl9DkLI","https://www.youtube.com/shorts/kuJ8GoUEZKM"]
         memenumber = random.randint(0, len(memes) - 1)
         await msg.channel.send(memes[memenumber])
+#   elif msg.content == 'g4:yourcommand':
+#       await msg.channel.send("your message here")
     elif msg.content == 'g4:help':
         await msg.channel.send('***---Logs commands---***\ng4:bilt: Activates/Deactivates bots in logs.\ng4:setlogschnlid: Sets logs channel id\n***---Other commands---***\ng4:meme: Posts a random meme\ng4:ping: What can happen... :thinking:\ng4:help: Shows this message\ng4:ownercmds: owner commands, ask gachaytb3ondc for access.\n***---Games---***\ng4:dice: roll a dice!\ng4:hazard: Play a game of hazard!\ng4:guesser: Guess a number between 1 and 10 and try to get the same number that the bot guessed!\ng4:finishit: find out yourself...')
     elif msg.content == 'g4:ownercmds':
