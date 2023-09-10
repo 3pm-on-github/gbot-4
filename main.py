@@ -24,6 +24,10 @@ botthingidklol.write(str(bot))
 botthingidklol.close()
 setup(gbotverthing='0.0.9')
 
+@bot.event
+async def on_ready():
+    await bot.change_presence(status=discord.Status.online, activity=discord.Game(name='wee wee baguette gachaytb3 the best gbot 4 too'))
+
 async def newlogsline(messagethingidk, messageauthor):
     global channelidthing
     if channelidthing != 0:
