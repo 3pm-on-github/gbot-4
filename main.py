@@ -22,7 +22,7 @@ channelidthing = 1144614402625110126
 botthingidklol = open('botthingidklol.txt', "w")
 botthingidklol.write(str(bot))
 botthingidklol.close()
-setup(gbotverthing='0.0.9')
+setup(gbotverthing='0.0.9', ismain=False)
 
 @bot.event
 async def on_ready():
