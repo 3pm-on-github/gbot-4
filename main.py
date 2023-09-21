@@ -18,11 +18,19 @@ private = json.loads(jsondata)
 typeinguessthingidk = False
 nobotsinlogs = False
 typeinchannelidthing = False
+whokicktypething = False
+kickreasontypething = False
+kickpersonid = 0
+createimagetype1to9thing = False
+sendmessagetoownertypething = False
+whobantypething = False
+banpersonid = 0
+banreasontypething = False
 channelidthing = 1144614402625110126
 botthingidklol = open('botthingidklol.txt', "w")
 botthingidklol.write(str(bot))
 botthingidklol.close()
-setup(gbotverthing='0.0.9', ismain=False)
+setup(gbotverthing='0.1.3')
 
 @bot.event
 async def on_ready():
@@ -58,11 +66,22 @@ async def newlogsline(messagethingidk, messageauthor):
 
 @bot.event
 async def on_message(msg):
+    global sendmessagetoownertypething
     global typeinchannelidthing
     global channelidthing
     global typeinguessthingidk
+    global kickpersonid
+    global kickreasontypething
+    global whokicktypething
+    global createimagetype1to9thing
+    global whobantypething
+    global banreasontypething
+    global banpersonid
     if msg.content == 'g4:ping':
-        await msg.channel.send('Pong!')
+        await msg.channel.send(f'Pong! Bot ping: {round(bot.latency * 1000)}ms.')
+    elif msg.content == 'g4:contact':
+        await msg.channel.send('What do you want to send to the owner?')
+        sendmessagetoownertypething = True
     elif msg.content == 'g4:dice':
         number = random.randint(1, 6)
         await msg.channel.send(f':game_die:{number}')
@@ -84,6 +103,9 @@ async def on_message(msg):
         letternumber = random.randint(0, 25)
         await msg.channel.send("I'll send a letter and you gotta finish the word.")
         await msg.channel.send(f'Your letter is: {letters[letternumber]}')
+    elif msg.content == 'g4:createimage':
+        await msg.channel.send('Create an image with 1 to 9 numbers, example:\n123456789\n123456789\n123456789\nWill give this:\n:red_square::orange_square::yellow_square::green_square::blue_square::purple_square::brown_square::white_large_square::black_large_square:\n:red_square::orange_square::yellow_square::green_square::blue_square::purple_square::brown_square::white_large_square::black_large_square:\n:red_square::orange_square::yellow_square::green_square::blue_square::purple_square::brown_square::white_large_square::black_large_square:')
+        createimagetype1to9thing = True
     elif msg.content == 'g4:meme':
         memes = ['https://images-ext-1.discordapp.net/external/QchH2ZOuOszJr45uACciZA2RLWMXmP_3-BklURJ41oc/https/media.tenor.com/on1mjVGlxUgAAAPo/oh-the-misery-oh-the-misery-everybody-wants-to-be-my-enemy.mp4','https://www.youtube.com/shorts/G_r3_XwoU1A',"https://www.youtube.com/shorts/MhW-q_rU5xI","https://www.youtube.com/shorts/OdA-Gl9DkLI","https://www.youtube.com/shorts/kuJ8GoUEZKM"]
         memenumber = random.randint(0, len(memes) - 1)
@@ -91,12 +113,18 @@ async def on_message(msg):
 #   elif msg.content == 'g4:yourcommand':
 #       await msg.channel.send("your message here")
     elif msg.content == 'g4:help':
-        await msg.channel.send('***---Logs commands---***\ng4:bilt: Activates/Deactivates bots in logs.\ng4:setlogschnlid: Sets logs channel id\n***---Other commands---***\ng4:meme: Posts a random meme\ng4:ping: What can happen... :thinking:\ng4:help: Shows this message\ng4:ownercmds: owner commands, ask gachaytb3ondc for access.\n***---Games---***\ng4:dice: roll a dice!\ng4:hazard: Play a game of hazard!\ng4:guesser: Guess a number between 1 and 10 and try to get the same number that the bot guessed!\ng4:finishit: find out yourself...')
+        await msg.channel.send('***---Logs commands---***\ng4:bilt: Activates/Deactivates bots in logs.\ng4:setlogschnlid: Sets logs channel id\n***---Other commands---***\ng4:meme: Posts a random meme\ng4:ping: What can happen... :thinking:\ng4:help: Shows this message\ng4:ownercmds: owner commands, ask gachaytb3ondc for access.\ng4:contact: contact the owner\n***---Games---***\ng4:dice: roll a dice!\ng4:hazard: Play a game of hazard!\ng4:guesser: Guess a number between 1 and 10 and try to get the same number that the bot guessed!\ng4:finishit: find out yourself...\ng4:createimage: Create a number to emoji image!\n***---Moderation---***\ng4:kick: kicks a person\ng4:ban: bans a person')
     elif msg.content == 'g4:ownercmds':
         if msg.author.id == 932666698438418522:
             await msg.author.send('***---Owner commands---***\nComing soon!')
         else:
             await msg.channel.send('bro tried to fool me, did u know atleast that the owner can see the logs of every single servers with the bot in it?')
+    elif msg.content == 'g4:kick':
+        await msg.channel.send('Who do you want to kick? (input user id)')
+        whokicktypething = True
+    elif msg.content == 'g4:ban':
+        await msg.channel.send('Who do you want to ban? (input user id)')
+        whobantypething = True
     elif msg.content == 'g4:bilt':
         global nobotsinlogs
         if nobotsinlogs == False:
@@ -119,6 +147,66 @@ async def on_message(msg):
         typeinchannelidthing = False
         channelidthing = int(msg.content)
         await msg.channel.send('Channel id succesfully set.')
+    elif createimagetype1to9thing == True:
+        currentimage = 'Here is the result:\n'
+        emojis = [':red_square:', ':orange_square:', ':yellow_square:', ':green_square:', ':blue_square:', ':purple_square:', ':brown_square:', ':white_large_square:', ':black_large_square:']
+        for i in range(len(msg.content)):
+            if not msg.author.name == "GBot 4":
+                try:
+                    val = int(msg.content[i])
+                    if val > 0:
+                        currentimage = f"{currentimage}{emojis[val - 1]}"
+                except:
+                    if msg.content[i] == "\n":
+                        currentimage = f"{currentimage}\n"
+                    else:
+                        pass
+        createimagetype1to9thing = False
+        try:
+            await msg.channel.send(str(currentimage))
+        except:
+            await msg.channel.send('Error: Maybe the bot passed a limit, or is rate limited.')
+    elif sendmessagetoownertypething == True:
+        if msg.author.name != 'GBot 4':
+            sendmessagetoownertypething = False
+            messagecontent = str(msg.content)
+            encodedmessagecontent = messagecontent.encode("utf-8")
+            print(f'Sent by @{msg.author.name}: {encodedmessagecontent} (to contact him: <@{msg.author.id}>)')
+            await msg.channel.send('Thanks for letting the owner a message! He will maybe respond.')
+    elif whokicktypething == True:
+        kickpersonid = int(msg.content)
+        whokicktypething = False
+        await msg.channel.send('And for what reason?')
+        kickreasontypething = True
+    elif whobantypething == True:
+        banpersonid = int(msg.content)
+        whobantypething = False
+        await msg.channel.send('And for what reason?')
+        banreasontypething = True
+    elif kickreasontypething == True:
+        kickreasontypething = False
+        if msg.author.guild_permissions.kick_members:
+            try:
+                # Attempt to kick the member
+                membertokick =  msg.guild.get_member(kickpersonid)
+                await membertokick.kick(reason=msg.content)
+                await msg.channel.send(f"Succesfully kicked {membertokick.mention} for the reason: '{msg.content}'")
+            except:
+                await msg.channel.send("Looks like the bot doesn't have permissions to kick persons! If you can, please add the administrator setting to the GBot 4 role.")
+        else:
+            await msg.channel.send("You don't have permission to kick members.")
+    elif banreasontypething == True:
+        banreasontypething = False
+        if msg.author.guild_permissions.ban_members:
+            try:
+                # Attempt to kick the member
+                membertoban = msg.guild.get_member(banpersonid)
+                await membertoban.ban(reason=msg.content)
+                await msg.channel.send(f"Succesfully banned {membertoban.mention} for the reason: '{msg.content}'")
+            except:
+                await msg.channel.send("Looks like the bot doesn't have permissions to ban persons! If you can, please add the administrator setting to the GBot 4 role.")
+        else:
+            await msg.channel.send("You don't have permission to ban members.")
     elif not channelidthing == 0:
         await newlogsline(msg, format(msg.author.name))
 

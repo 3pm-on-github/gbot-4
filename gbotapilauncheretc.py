@@ -6,7 +6,7 @@ loop = False
 root = None
 gbotver = None
 
-def setup(gbotverthing, ismain):
+def setup(gbotverthing):
     botthingidklol = open('botthingidklol.txt', "r")
     bot = botthingidklol.read()
     gbotver = gbotverthing
