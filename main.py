@@ -26,6 +26,7 @@ sendmessagetoownertypething = False
 whobantypething = False
 banpersonid = 0
 banreasontypething = False
+searchgiftypething = False
 channelidthing = 1144614402625110126
 botthingidklol = open('botthingidklol.txt', "w")
 botthingidklol.write(str(bot))
@@ -77,6 +78,7 @@ async def on_message(msg):
     global whobantypething
     global banreasontypething
     global banpersonid
+    global searchgiftypething
     if msg.content == 'g4:ping':
         await msg.channel.send(f'Pong! Bot ping: {round(bot.latency * 1000)}ms.')
     elif msg.content == 'g4:contact':
@@ -107,13 +109,18 @@ async def on_message(msg):
         await msg.channel.send('Create an image with 1 to 9 numbers, example:\n123456789\n123456789\n123456789\nWill give this:\n:red_square::orange_square::yellow_square::green_square::blue_square::purple_square::brown_square::white_large_square::black_large_square:\n:red_square::orange_square::yellow_square::green_square::blue_square::purple_square::brown_square::white_large_square::black_large_square:\n:red_square::orange_square::yellow_square::green_square::blue_square::purple_square::brown_square::white_large_square::black_large_square:')
         createimagetype1to9thing = True
     elif msg.content == 'g4:meme':
-        memes = ['https://images-ext-1.discordapp.net/external/QchH2ZOuOszJr45uACciZA2RLWMXmP_3-BklURJ41oc/https/media.tenor.com/on1mjVGlxUgAAAPo/oh-the-misery-oh-the-misery-everybody-wants-to-be-my-enemy.mp4','https://www.youtube.com/shorts/G_r3_XwoU1A',"https://www.youtube.com/shorts/MhW-q_rU5xI","https://www.youtube.com/shorts/OdA-Gl9DkLI","https://www.youtube.com/shorts/kuJ8GoUEZKM"]
-        memenumber = random.randint(0, len(memes) - 1)
-        await msg.channel.send(memes[memenumber])
+        from memeapi import memeApi
+        root = memeApi()
+        meme = root.getmeme()
+        await msg.channel.send(f"*subreddit: {meme['subreddit']}, author: {meme['author']}*\n**{meme['title']}**")
+        await msg.channel.send(meme['url'])
+    elif msg.content == 'g4:searchgif':
+        await msg.channel.send('What do you want to search?')
+        searchgiftypething = True
 #   elif msg.content == 'g4:yourcommand':
 #       await msg.channel.send("your message here")
     elif msg.content == 'g4:help':
-        await msg.channel.send('***---Logs commands---***\ng4:bilt: Activates/Deactivates bots in logs.\ng4:setlogschnlid: Sets logs channel id\n***---Other commands---***\ng4:meme: Posts a random meme\ng4:ping: What can happen... :thinking:\ng4:help: Shows this message\ng4:ownercmds: owner commands, ask gachaytb3ondc for access.\ng4:contact: contact the owner\n***---Games---***\ng4:dice: roll a dice!\ng4:hazard: Play a game of hazard!\ng4:guesser: Guess a number between 1 and 10 and try to get the same number that the bot guessed!\ng4:finishit: find out yourself...\ng4:createimage: Create a number to emoji image!\n***---Moderation---***\ng4:kick: kicks a person\ng4:ban: bans a person')
+        await msg.channel.send('***---Logs commands---***\ng4:bilt: Activates/Deactivates bots in logs.\ng4:setlogschnlid: Sets logs channel id\n***---Other commands---***\ng4:searchgif: search a gif\ng4:meme: Posts a random meme\ng4:ping: What can happen... :thinking:\ng4:help: Shows this message\ng4:ownercmds: owner commands, ask gachaytb3ondc for access.\ng4:contact: contact the owner\n***---Games---***\ng4:dice: roll a dice!\ng4:hazard: Play a game of hazard!\ng4:guesser: Guess a number between 1 and 10 and try to get the same number that the bot guessed!\ng4:finishit: find out yourself...\ng4:createimage: Create a number to emoji image!\n***---Moderation---***\ng4:kick: kicks a person\ng4:ban: bans a person')
     elif msg.content == 'g4:ownercmds':
         if msg.author.id == 932666698438418522:
             await msg.author.send('***---Owner commands---***\nComing soon!')
@@ -173,6 +180,11 @@ async def on_message(msg):
             encodedmessagecontent = messagecontent.encode("utf-8")
             print(f'Sent by @{msg.author.name}: {encodedmessagecontent} (to contact him: <@{msg.author.id}>)')
             await msg.channel.send('Thanks for letting the owner a message! He will maybe respond.')
+    elif searchgiftypething == True:
+        searchgiftypething = False
+        from memeapi import memeApi
+        root = memeApi()
+        await msg.channel.send(root.getgif(str(msg.content), 'LIVDSRZULELA', 8))
     elif whokicktypething == True:
         kickpersonid = int(msg.content)
         whokicktypething = False
