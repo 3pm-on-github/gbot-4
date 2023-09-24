@@ -66,6 +66,19 @@ async def newlogsline(messagethingidk, messageauthor):
             await channel.send(f'{todaything.strftime("%d/%m/%Y")} at {againnowthing}: @{messageauthor} said ``{encodedmessagecontent}`` in channel <#{messagethingidk.channel.id}> in {messagethingidk.guild.name}.')
 
 @bot.event
+async def on_ready():
+    print('The bot is online!')
+    print('------------------')
+    if date.today() == '2023-10-15':
+        print('Hey! Its haloween event day! You should start the event!')
+    elif date.today() == '2023-12-15':
+        print('Hey! Its christmas event day! You should start the event!')
+    elif date.today() == '2023-10-31':
+        print('Hey! Its no longer haloween event day! You should delete the messages!')
+    elif date.today() == '2023-12-31':
+        print('Hey! Its no longer christmas event day! You should delete the messages!')
+
+@bot.event
 async def on_message(msg):
     global sendmessagetoownertypething
     global typeinchannelidthing
@@ -100,6 +113,18 @@ async def on_message(msg):
     elif msg.content == 'g4:guesser':
         await msg.channel.send('Guess a number between 1 and 10 and then type it in the chat.')
         typeinguessthingidk = True
+    elif msg.content == 'g4:starthaloweenevent':
+        if date.today() == '2023-10-15':
+            message = await msg.channel.send("The Halloween event has Started! <:FBFServerHallowenimage:1035263501549187183> React with The Halloween Emoji To Win 2,000 coins! :jack_o_lantern:")
+            await message.add_reaction("🎃")
+        else:
+            await msg.channel.send("The event hasn't started yet! Wait for 2023-10-15.")
+    elif msg.content == 'g4:startchristmasevent':
+        if date.today() == '2023-12-15':
+            message = await msg.channel.send("The Christmas event has Started! <:FBFServerchristmasimage:1155521299179917432> React with The Christmas Tree Emoji To Win 5,000 coins! :christmas_tree:")
+            await message.add_reaction("🎄")
+        else:
+            await msg.channel.send("The event hasn't started yet! Wait for 2023-12-15.")
     elif msg.content == 'g4:finishit':
         letters = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
         letternumber = random.randint(0, 25)
@@ -123,7 +148,7 @@ async def on_message(msg):
         await msg.channel.send('***---Logs commands---***\ng4:bilt: Activates/Deactivates bots in logs.\ng4:setlogschnlid: Sets logs channel id\n***---Other commands---***\ng4:searchgif: search a gif\ng4:meme: Posts a random meme\ng4:ping: What can happen... :thinking:\ng4:help: Shows this message\ng4:ownercmds: owner commands, ask gachaytb3ondc for access.\ng4:contact: contact the owner\n***---Games---***\ng4:dice: roll a dice!\ng4:hazard: Play a game of hazard!\ng4:guesser: Guess a number between 1 and 10 and try to get the same number that the bot guessed!\ng4:finishit: find out yourself...\ng4:createimage: Create a number to emoji image!\n***---Moderation---***\ng4:kick: kicks a person\ng4:ban: bans a person')
     elif msg.content == 'g4:ownercmds':
         if msg.author.id == 932666698438418522:
-            await msg.author.send('***---Owner commands---***\nComing soon!')
+            await msg.author.send('***---Owner commands---***\ng4:starthaloweenevent: start the haloween event.\ng4:startchristmasevent: start the christmas event.')
         else:
             await msg.channel.send('bro tried to fool me, did u know atleast that the owner can see the logs of every single servers with the bot in it?')
     elif msg.content == 'g4:kick':
@@ -221,5 +246,22 @@ async def on_message(msg):
             await msg.channel.send("You don't have permission to ban members.")
     elif not channelidthing == 0:
         await newlogsline(msg, format(msg.author.name))
+
+@bot.event
+async def on_raw_reaction_add(reaction):
+    if reaction.user_id != 1144229461953368214 and reaction.emoji.name == '🎃':
+        guild = bot.get_guild(925032109595308072)
+        member = guild.get_member(776163922432622603)
+        await member.send(f'**Someone reacted to the Halloween event with the emoji! User: <@{reaction.user_id}>**')
+        guild2 = bot.get_guild(reaction.guild_id)
+        member2 = guild2.get_member(reaction.user_id)
+        await member2.send('**You Won 2,000 Coins! of the Halloween Event! They Will be Given Later, Have Fun!**')
+    elif reaction.user_id != 1144229461953368214 and reaction.emoji.name == '🎄':
+        guild = bot.get_guild(925032109595308072)
+        member = guild.get_member(776163922432622603)
+        await member.send(f'**Someone reacted to the Christmas event with the emoji! User: <@{reaction.user_id}>**')
+        guild2 = bot.get_guild(reaction.guild_id)
+        member2 = guild2.get_member(reaction.user_id)
+        await member2.send('**You Won 5,000 Coins! of the Christmas Event! They Will be Given Later, Have a Nice Christmas!**')
 
 bot.run(token=str(private['token']))
