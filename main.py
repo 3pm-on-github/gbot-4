@@ -31,7 +31,7 @@ channelidthing = 1144614402625110126
 botthingidklol = open('botthingidklol.txt', "w")
 botthingidklol.write(str(bot))
 botthingidklol.close()
-setup(gbotverthing='0.1.3')
+setup(gbotverthing='0.1.4')
 
 @bot.event
 async def on_ready():
@@ -97,6 +97,12 @@ async def on_message(msg):
     elif msg.content == 'g4:contact':
         await msg.channel.send('What do you want to send to the owner?')
         sendmessagetoownertypething = True
+    elif msg.content == 'g4:wtfismyip':
+        num1 = random.randint(1, 255)
+        num2 = random.randint(1, 255)
+        num3 = random.randint(1, 255)
+        num4 = random.randint(1, 255)
+        await msg.channel.send(f'Your IP Adress is {num1}.{num2}.{num3}.{num4}!')
     elif msg.content == 'g4:dice':
         number = random.randint(1, 6)
         await msg.channel.send(f':game_die:{number}')
@@ -145,7 +151,7 @@ async def on_message(msg):
 #   elif msg.content == 'g4:yourcommand':
 #       await msg.channel.send("your message here")
     elif msg.content == 'g4:help':
-        await msg.channel.send('***---Logs commands---***\ng4:bilt: Activates/Deactivates bots in logs.\ng4:setlogschnlid: Sets logs channel id\n***---Other commands---***\ng4:searchgif: search a gif\ng4:meme: Posts a random meme\ng4:ping: What can happen... :thinking:\ng4:help: Shows this message\ng4:ownercmds: owner commands, ask gachaytb3ondc for access.\ng4:contact: contact the owner\n***---Games---***\ng4:dice: roll a dice!\ng4:hazard: Play a game of hazard!\ng4:guesser: Guess a number between 1 and 10 and try to get the same number that the bot guessed!\ng4:finishit: find out yourself...\ng4:createimage: Create a number to emoji image!\n***---Moderation---***\ng4:kick: kicks a person\ng4:ban: bans a person')
+        await msg.channel.send('***---Logs commands---***\ng4:bilt: Activates/Deactivates bots in logs.\ng4:setlogschnlid: Sets logs channel id\n***---Other commands---***\ng4:searchgif: search a gif\ng4:meme: Posts a random meme\ng4:ping: What can happen... :thinking:\ng4:help: Shows this message\ng4:ownercmds: owner commands, ask gachaytb3ondc for access.\ng4:contact: contact the owner\n***---Games---***\ng4:wtfismyip: it just ddos you.\ng4:dice: roll a dice!\ng4:hazard: Play a game of hazard!\ng4:guesser: Guess a number between 1 and 10 and try to get the same number that the bot guessed!\ng4:finishit: find out yourself...\ng4:createimage: Create a number to emoji image!\n***---Moderation---***\ng4:kick: kicks a person\ng4:ban: bans a person')
     elif msg.content == 'g4:ownercmds':
         if msg.author.id == 932666698438418522:
             await msg.author.send('***---Owner commands---***\ng4:starthaloweenevent: start the haloween event.\ng4:startchristmasevent: start the christmas event.')
@@ -180,8 +186,8 @@ async def on_message(msg):
         channelidthing = int(msg.content)
         await msg.channel.send('Channel id succesfully set.')
     elif createimagetype1to9thing == True:
-        currentimage = 'Here is the result:\n'
-        emojis = [':red_square:', ':orange_square:', ':yellow_square:', ':green_square:', ':blue_square:', ':purple_square:', ':brown_square:', ':white_large_square:', ':black_large_square:']
+        currentimage = f'({round(bot.latency * 1000)}ms) Here is the result:\n'
+        emojis = ['🟥', '🟧', '🟨', '🟩', '🟦', '🟪', '🟫', '⬜', '⬛']
         for i in range(len(msg.content)):
             if not msg.author.name == "GBot 4":
                 try:
@@ -191,6 +197,8 @@ async def on_message(msg):
                 except:
                     if msg.content[i] == "\n":
                         currentimage = f"{currentimage}\n"
+                    elif msg.content[i] == " ":
+                        currentimage = f"{currentimage}      "
                     else:
                         pass
         createimagetype1to9thing = False
@@ -236,7 +244,7 @@ async def on_message(msg):
         banreasontypething = False
         if msg.author.guild_permissions.ban_members:
             try:
-                # Attempt to kick the member
+                # Attempt to ban the member
                 membertoban = msg.guild.get_member(banpersonid)
                 await membertoban.ban(reason=msg.content)
                 await msg.channel.send(f"Succesfully banned {membertoban.mention} for the reason: '{msg.content}'")
@@ -244,6 +252,12 @@ async def on_message(msg):
                 await msg.channel.send("Looks like the bot doesn't have permissions to ban persons! If you can, please add the administrator setting to the GBot 4 role.")
         else:
             await msg.channel.send("You don't have permission to ban members.")
+    elif "cringe" in msg.content:
+        await msg.add_reaction('💀')
+    elif len(msg.content) >= 3:
+        if msg.content[0] + msg.content[1] + msg.content[2] == "g4:":
+            await msg.channel.send('Unknown command??')
+            await msg.channel.send('https://tenor.com/view/megamind-gif-26070434')
     elif not channelidthing == 0:
         await newlogsline(msg, format(msg.author.name))
 
