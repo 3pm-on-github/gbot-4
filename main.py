@@ -27,20 +27,23 @@ whobantypething = False
 banpersonid = 0
 banreasontypething = False
 searchgiftypething = False
-channelidthing = 1144614402625110126
+searchytvidtypething = False
+serveridthings = []
+channelidthings = []
 botthingidklol = open('botthingidklol.txt', "w")
 botthingidklol.write(str(bot))
 botthingidklol.close()
-setup(gbotverthing='0.1.4')
+# setup(gbotverthing='0.1.5')
 
 @bot.event
 async def on_ready():
     await bot.change_presence(status=discord.Status.online, activity=discord.Game(name='wee wee baguette gachaytb3 the best gbot 4 too'))
 
 async def newlogsline(messagethingidk, messageauthor):
-    global channelidthing
-    if channelidthing != 0:
-        channel = bot.get_channel(channelidthing)
+    global channelidthings
+    global serveridthings
+    if channelidthings != [] and serveridthings != []:
+        channel = bot.get_channel(int(channelidthings[serveridthings.index(messagethingidk.guild.id)]))
     global nobotsinlogs
     if not messageauthor == 'GBot 4':
         if nobotsinlogs == True:
@@ -82,7 +85,8 @@ async def on_ready():
 async def on_message(msg):
     global sendmessagetoownertypething
     global typeinchannelidthing
-    global channelidthing
+    global channelidthings
+    global serveridthings
     global typeinguessthingidk
     global kickpersonid
     global kickreasontypething
@@ -92,6 +96,7 @@ async def on_message(msg):
     global banreasontypething
     global banpersonid
     global searchgiftypething
+    global searchytvidtypething
     if msg.content == 'g4:ping':
         await msg.channel.send(f'Pong! Bot ping: {round(bot.latency * 1000)}ms.')
     elif msg.content == 'g4:contact':
@@ -148,10 +153,13 @@ async def on_message(msg):
     elif msg.content == 'g4:searchgif':
         await msg.channel.send('What do you want to search?')
         searchgiftypething = True
+    elif msg.content == "g4:searchytvideo":
+        await msg.channel.send('What do you want to search?')
+        searchytvidtypething = True
 #   elif msg.content == 'g4:yourcommand':
 #       await msg.channel.send("your message here")
     elif msg.content == 'g4:help':
-        await msg.channel.send('***---Logs commands---***\ng4:bilt: Activates/Deactivates bots in logs.\ng4:setlogschnlid: Sets logs channel id\n***---Other commands---***\ng4:searchgif: search a gif\ng4:meme: Posts a random meme\ng4:ping: What can happen... :thinking:\ng4:help: Shows this message\ng4:ownercmds: owner commands, ask gachaytb3ondc for access.\ng4:contact: contact the owner\n***---Games---***\ng4:wtfismyip: it just ddos you.\ng4:dice: roll a dice!\ng4:hazard: Play a game of hazard!\ng4:guesser: Guess a number between 1 and 10 and try to get the same number that the bot guessed!\ng4:finishit: find out yourself...\ng4:createimage: Create a number to emoji image!\n***---Moderation---***\ng4:kick: kicks a person\ng4:ban: bans a person')
+        await msg.channel.send('***---Logs commands---***\ng4:bilt: Activates/Deactivates bots in logs.\ng4:setlogschnlid: Sets logs channel id\n***---Other commands---***\ng4:searchgif: search a gif\ng4:searchytvideo: search a youtube video\ng4:meme: Posts a random meme\ng4:ping: What can happen... :thinking:\ng4:help: Shows this message\ng4:ownercmds: owner commands, ask gachaytb3ondc for access.\ng4:contact: contact the owner\n***---Games---***\ng4:wtfismyip: it just ddos you.\ng4:dice: roll a dice!\ng4:hazard: Play a game of hazard!\ng4:guesser: Guess a number between 1 and 10 and try to get the same number that the bot guessed!\ng4:finishit: find out yourself...\ng4:createimage: Create a number to emoji image!\n***---Moderation---***\ng4:kick: kicks a person\ng4:ban: bans a person')
     elif msg.content == 'g4:ownercmds':
         if msg.author.id == 932666698438418522:
             await msg.author.send('***---Owner commands---***\ng4:starthaloweenevent: start the haloween event.\ng4:startchristmasevent: start the christmas event.')
@@ -183,8 +191,13 @@ async def on_message(msg):
             await msg.channel.send(f'Oops, wrong answer! The correct answer was {number}.')
     elif typeinchannelidthing == True:
         typeinchannelidthing = False
-        channelidthing = int(msg.content)
-        await msg.channel.send('Channel id succesfully set.')
+        try:
+            channelidthings[serveridthings.index(msg.guild.id)] = msg.content
+            await msg.channel.send('Channel id succesfully set.')
+        except:
+            serveridthings.append(msg.guild.id)
+            channelidthings.append(msg.content)
+            await msg.channel.send('Channel id succesfully set.')
     elif createimagetype1to9thing == True:
         currentimage = f'({round(bot.latency * 1000)}ms) Here is the result:\n'
         emojis = ['🟥', '🟧', '🟨', '🟩', '🟦', '🟪', '🟫', '⬜', '⬛']
@@ -198,7 +211,7 @@ async def on_message(msg):
                     if msg.content[i] == "\n":
                         currentimage = f"{currentimage}\n"
                     elif msg.content[i] == " ":
-                        currentimage = f"{currentimage}      "
+                        currentimage = f"{currentimage} "
                     else:
                         pass
         createimagetype1to9thing = False
@@ -218,6 +231,21 @@ async def on_message(msg):
         from memeapi import memeApi
         root = memeApi()
         await msg.channel.send(root.getgif(str(msg.content), 'LIVDSRZULELA', 8))
+    elif searchytvidtypething == True:
+        searchytvidtypething = False
+        import requests
+        import json
+        
+        r = requests.get(f'https://youtube.googleapis.com/youtube/v3/search?part=snippet&key=AIzaSyDc5KoW09LCwWjx1KPNbRRGouTjpITPqYU&type=video&q={str(msg.content)}')
+
+        if r.status_code == 200:
+            ytvid = json.loads(r.content)
+            try:
+                await msg.channel.send(f"https://www.youtube.com/watch?v={ytvid['items'][0]['id']['videoId']}")
+            except:
+                print(ytvid)
+        else:
+            ytvid = None
     elif whokicktypething == True:
         kickpersonid = int(msg.content)
         whokicktypething = False
@@ -258,7 +286,7 @@ async def on_message(msg):
         if msg.content[0] + msg.content[1] + msg.content[2] == "g4:":
             await msg.channel.send('Unknown command??')
             await msg.channel.send('https://tenor.com/view/megamind-gif-26070434')
-    elif not channelidthing == 0:
+    elif channelidthings != [] and serveridthings != []:
         await newlogsline(msg, format(msg.author.name))
 
 @bot.event
