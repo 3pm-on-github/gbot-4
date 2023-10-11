@@ -56,7 +56,7 @@ async def newlogsline(messagethingidk, messageauthor):
                 logs = open('logs.txt', "a")
                 logs.write(f'{todaything.strftime("%d/%m/%Y")} at {againnowthing}: @{messageauthor} said {encodedmessagecontent} in channel <#{messagethingidk.channel.id}> in {messagethingidk.guild.name}.\n') #type: ignore
                 logs.close()
-                await channel.send(f'{todaything.strftime("%d/%m/%Y")} at {againnowthing}: @{messageauthor} said ``{encodedmessagecontent}`` in channel <#{messagethingidk.channel.id}> in {messagethingidk.guild.name}.')
+                await channel.send(f'{todaything.strftime("%d/%m/%Y")} at {againnowthing}: @{messageauthor} said ``{encodedmessagecontent}`` in channel <#{messagethingidk.channel.id}>.')
         elif nobotsinlogs == False:
             todaything = date.today()
             nowthing = datetime.datetime.now()
@@ -66,7 +66,7 @@ async def newlogsline(messagethingidk, messageauthor):
             logs = open('logs.txt', "a")
             logs.write(f'{todaything.strftime("%d/%m/%Y")} at {againnowthing}: @{messageauthor} said {encodedmessagecontent} in channel <#{messagethingidk.channel.id}> in {messagethingidk.guild.name}.\n') #type: ignore
             logs.close()
-            await channel.send(f'{todaything.strftime("%d/%m/%Y")} at {againnowthing}: @{messageauthor} said ``{encodedmessagecontent}`` in channel <#{messagethingidk.channel.id}> in {messagethingidk.guild.name}.')
+            await channel.send(f'{todaything.strftime("%d/%m/%Y")} at {againnowthing}: @{messageauthor} said ``{encodedmessagecontent}`` in channel <#{messagethingidk.channel.id}>.')
 
 @bot.event
 async def on_ready():
@@ -191,12 +191,15 @@ async def on_message(msg):
             await msg.channel.send(f'Oops, wrong answer! The correct answer was {number}.')
     elif typeinchannelidthing == True:
         typeinchannelidthing = False
+        chanel = msg.content
+        if msg.content == 'tc':
+            chanel = msg.channel.id
         try:
-            channelidthings[serveridthings.index(msg.guild.id)] = msg.content
+            channelidthings[serveridthings.index(msg.guild.id)] = chanel
             await msg.channel.send('Channel id succesfully set.')
         except:
             serveridthings.append(msg.guild.id)
-            channelidthings.append(msg.content)
+            channelidthings.append(chanel)
             await msg.channel.send('Channel id succesfully set.')
     elif createimagetype1to9thing == True:
         currentimage = f'({round(bot.latency * 1000)}ms) Here is the result:\n'
