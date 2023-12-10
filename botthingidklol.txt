@@ -1,1 +1,0 @@
-<discord.ext.commands.bot.Bot object at 0x0000022CC1608130>

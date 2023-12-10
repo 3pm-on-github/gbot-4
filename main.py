@@ -43,9 +43,6 @@ userswithownercmdsperms = [932666698438418522]
 serveridthings = [925032109595308072,1003762988198670356] # presets for servers commonly used, don't remove.
 channelidthings = [1144614402625110126,1161645548189786112]
 nobotsinlogs = [False, False]
-botthingidklol = open('botthingidklol.txt', "w")
-botthingidklol.write(str(bot))
-botthingidklol.close()
 setup(gbotverthing='0.1.7')
 
 def firstLettersOfString(str, letters):
