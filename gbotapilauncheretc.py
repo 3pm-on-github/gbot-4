@@ -65,4 +65,4 @@ def startapi():
     elif variablelol == 'no':
         print('ok bye')
 
-startapi()
+#startapi()
