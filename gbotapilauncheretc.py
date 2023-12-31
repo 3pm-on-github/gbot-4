@@ -30,7 +30,7 @@ def askcommand():
         try:
             test_i1 = int(channelid)
         except:
-            print("sendmsg: ERROR 3: input: \n\""+channelid+"\"\n could not be recognised as a Channel ID.")
+            print("sendmsg: ERROR 3: input: \n"+channelid+"\n could not be recognised as a Channel ID.")
             error = True
             if "," in channelid:
                 print("Perhaps, why did you put a comma?")

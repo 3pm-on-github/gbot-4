@@ -8,6 +8,59 @@ import json
 import datetime
 import time
 import random
+import io
+import sys
+error = ""
+
+def execute_code(code):
+    # Redirect stdout to capture the output
+    stdout_backup = sys.stdout
+    sys.stdout = io.StringIO()
+    global error
+
+    try:
+        # Execute the code
+        try:
+            exec(code)
+        except Exception as e:
+            error = str(e)
+
+        # Get the captured output
+        output = ""
+        if error == "":
+            output = sys.stdout.getvalue()
+        else:
+            output = error
+
+        return output
+    finally:
+        # Restore the original stdout
+        sys.stdout = stdout_backup
+
+cases = []
+colors = ["🟥", "🟧", "🟨", "🟩", "🟦", "🟪", "🟫", "⬛", "⬜"]
+# colors = [":red_square:", ":orange_square:", ":yellow_square:", ":green_square:", ":blue_square:", ":purple_square:", ":brown_square:", ":black_large_square:", ":white_large_square:"]
+for i in range(25 * 25):
+    cases.append(colors[8])
+
+def print_grid():
+    currentcharidx = -1
+    currentstr = ""
+    for item in cases:
+        currentcharidx += 1
+        if currentcharidx == 25:
+            currentcharidx = 0
+            currentstr = currentstr + "\n" + item
+        else:
+            currentstr = currentstr + item
+    return currentstr
+
+def change_pixel(prompt: str):
+    x = int(prompt[0:2]) - 1  # Extract the X coordinate from the prompt
+    y = int(prompt[2:4]) - 1  # Extract the Y coordinate from the prompt
+    colorid = int(prompt[5]) - 1  # Extract the color ID from the prompt
+    position = y * 25 + x  # Calculate the position in the cases list
+    cases[position] = colors[colorid]
 
 bot = commands.Bot('qsdvsqvdgiuodsngvuodsgvobdugtvbqsdfyuqdscbso', intents=discord.Intents.all())
 bot.remove_command('help')
@@ -40,10 +93,10 @@ fishingstrings = ['You got 10 GBot coins! Oh, cool!', 'You got 100 GBot coins! W
 usersidcointhings = [932666698438418522, 1119624916728295434, 1054815152538661016]
 cointhings = [100000000000000000000000000000000000000000000000000000000, 10, 2]
 userswithownercmdsperms = [932666698438418522]
-serveridthings = [925032109595308072,1003762988198670356] # presets for servers commonly used, don't remove.
-channelidthings = [1144614402625110126,1161645548189786112]
+serveridthings = [925032109595308072,1003762988198670356, 916797303749214208] # presets for servers commonly used, don't remove.
+channelidthings = [1144614402625110126,1161645548189786112, 1183438259292995684]
 nobotsinlogs = [False, False]
-setup(gbotverthing='0.1.7')
+setup(gbotverthing='0.1.8', bott=bot)
 
 def firstLettersOfString(str, letters):
     if len(str) >= letters:
@@ -75,12 +128,12 @@ async def newlogsline(messagethingidk, messageauthor):
             againnowthing = nowthing.strftime("%H:%M:%S")
             messagecontent = str(messagethingidk.content)
             encodedmessagecontent = messagecontent.encode("utf-8")
-            server = discord.utils.get(bot.guilds, name=messagethingidk.guild.name)
-            try:
-                invite = await server.text_channels[0].create_invite(max_uses=1, unique=True)
-                print(f'i got an invite link :) here is it: {invite.url}')
-            except:
-                pass
+            #server = discord.utils.get(bot.guilds, name=messagethingidk.guild.name)
+            #try:
+            #    invite = await server.text_channels[0].create_invite(max_uses=1, unique=True)
+            #    print(f'i got an invite link :) here is it: {invite.url}')
+            #except:
+            #    pass
             logs = open('logs.txt', "a")
             logs.write(f'{todaything.strftime("%d/%m/%Y")} at {againnowthing}: @{messageauthor} said {str(encodedmessagecontent).removeprefix("b")} in dms/unknown server.\n') #type: ignore
             logs.close()
@@ -110,6 +163,11 @@ async def newlogsline(messagethingidk, messageauthor):
                 await channel.send(f'{todaything.strftime("%d/%m/%Y")} at {againnowthing}: @{messageauthor} said ``{str(encodedmessagecontent).removeprefix("b")}`` in channel <#{messagethingidk.channel.id}>.')
         except:
             pass
+
+@bot.event
+async def on_member_join(member):
+    if member.id == 1176866349562212397 or member.id == 1185908190920056915:
+        member.ban(reason="SALE RAIDEUR VA")
 
 @bot.event
 async def on_ready():
@@ -159,6 +217,8 @@ async def on_message(msg):
     global banpersonid
     global searchgiftypething
     global searchytvidtypething
+    global cases
+    global colors
    #ownercmds required code:
    #     if msg.author.id in userswithownercmdsperms:
    #         (your cmd code here)
@@ -166,6 +226,13 @@ async def on_message(msg):
    #         await msg.channel.send("Oops! Looks like you don't have the permissions to access the owner commands, Sorry!")
     if msg.content == 'g4:ping':
         await msg.channel.send(f'Pong! Bot ping: {round(bot.latency * 1000)}ms.')
+    elif msg.content == "g4:gb/place:reset":
+        if msg.author.id in userswithownercmdsperms:
+            for i in range(25 * 25):
+                cases[i] = colors[8]
+            await msg.channel.send("Success!")
+        else:
+            await msg.channel.send("Oops! Looks like you don't have the permissions to access the owner commands, Sorry!")
     elif msg.content == 'g4:contact':
         await msg.channel.send('What do you want to send to the owner?')
         sendmessagetoownertypething = True
@@ -241,6 +308,9 @@ async def on_message(msg):
                 await msg.channel.send("You don't have that much to bet, get some more coins in other ways..")
         except:
             await msg.channel.send("You don't have a wallet... Type the command: g4:getwallet to get a wallet!")
+    elif msg.content == 'g4:gb/place:instantgrid':
+        print(print_grid())
+        print("---------------------------------------------------------------")
     elif msg.content == 'g4:fish':
         try:
             lol = cointhings[usersidcointhings.index(msg.author.id)]
@@ -278,6 +348,20 @@ async def on_message(msg):
     elif msg.content == 'g4:dice':
         number = random.randint(1, 6)
         await msg.channel.send(f':game_die:{number}')
+    elif msg.content == 'g4:gb/place:grid':
+        await msg.channel.send("Here is the current grid for gb/place (this will take 50 seconds just to send to avoid ratelimiting):")
+        for line in print_grid().split("\n"):
+            await msg.channel.send(line + "⠀")
+            time.sleep(2)
+    elif firstLettersOfString(msg.content, 23) == "g4:gb/place:changepixel":
+        await msg.channel.send("Here are the color ids just to remind you:\n  1    2    3    4    5    6    7   8    9\n🟥🟧🟨🟩🟦🟪🟫⬛⬜")
+        try:
+            change_pixel(msg.content.removeprefix("g4:gb/place:changepixel "))
+            await msg.channel.send("Success!")
+        except IndexError:
+            await msg.channel.send("An error occured with the inputs that you gave.")
+        except Exception as e:
+            await msg.channel.send("An error occured: " + str(e))
     elif msg.content == 'g4:hazard':
         await msg.channel.send(f'Please take your time and choose what happens when we get red, orange, yellow, green or blue. You have 30 seconds.')
         time.sleep(30)
@@ -291,13 +375,6 @@ async def on_message(msg):
     elif msg.content == 'g4:guesser':
         await msg.channel.send('Guess a number between 1 and 10 and then type it in the chat.')
         typeinguessthingidk = True
-    elif msg.content == 'g4:startchristmasevent':
-        if msg.author.id in userswithownercmdsperms:
-            await msg.channel.purge(limit=1)
-            message = await msg.channel.send("The Christmas event has Started! <:FBFServerchristmasimage:1155521299179917432> React with The Christmas Tree Emoji To Win 5,000 coins! :christmas_tree:")
-            await message.add_reaction("🎄")
-        else:
-            await msg.channel.send("Oops! Looks like you don't have the permissions to access the owner commands, Sorry!")
     elif msg.content == 'g4:finishit':
         letters = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
         letternumber = random.randint(0, 25)
@@ -375,10 +452,10 @@ async def on_message(msg):
 #   elif msg.content == 'g4:yourcommand':
 #       await msg.channel.send("your message here")
     elif msg.content == 'g4:help':
-        await msg.channel.send('***---Logs commands---***\ng4:bilt: Activates/Deactivates bots in logs.\ng4:setlogschnlid: Sets logs channel id\n***---Other commands---***\n(coming soon) g4:creatememe: Creates a meme\n(coming soon) g4:creatememetypes: Lists the CreateMeme Types.\ng4:searchgif: search a gif\ng4:searchytvideo: search a youtube video\ng4:meme: Posts a random meme\ng4:ping: What can happen... :thinking:\ng4:help: Shows this message\ng4:ownercmds: owner commands, ask gachaytb3ondc for access.\ng4:contact: contact the owner\ng4:nsfw: just... try it out :)\n***---Games---***\ng4:wtfismyip: it just ddos you. (its just a joke, dont worry.)\ng4:dice: roll a dice!\ng4:hazard: Play a game of hazard!\ng4:guesser: Guess a number between 1 and 10 and try to get the same number that the bot guessed!\ng4:finishit: find out yourself...\ng4:createimage: Create a number to emoji image!\n***---Moderation---***\ng4:kick: kicks a person\ng4:ban: bans a person\n***---Economy---***\ng4:getwallet: Gives you a wallet.\ng4:wallet: Shows you how much GBot Coins do you have.\n``g4:fish``: Want to fish? Use this command!\ng4:dicebet (amount to bet): Bets the ammount you chose and if you get a 1 or a 6, you get the amount you bet.\ng4:roulette (amount to bet): Play the roulette to try and win the bet!...\n***---SocialSphere---***\ng4:ssonlineusers: shows how many users are online on SocialSphere\ng4:sssendmsg: sends a message to someone of your choice... uhh pls use it carefully\ng4:everyssusers: shows every SocialSphere users.\ng4:avatarofssuser (SocialSphere username): shows the avatar of the following user')
+        await msg.channel.send('***---Logs commands---***\ng4:bilt: Activates/Deactivates bots in logs.\ng4:setlogschnlid: Sets logs channel id\n***---Other commands---***\n(coming soon) g4:creatememe: Creates a meme\n(coming soon) g4:creatememetypes: Lists the CreateMeme Types.\ng4:searchgif: search a gif\ng4:searchytvideo: search a youtube video\ng4:meme: Posts a random meme\ng4:ping: What can happen... :thinking:\ng4:help: Shows this message\ng4:ownercmds: owner commands, ask gachaytb3ondc for access.\ng4:contact: contact the owner\ng4:nsfw: just... try it out :)\n***---Games---***\ng4:wtfismyip: it just ddos you. (its just a joke, dont worry.)\ng4:dice: roll a dice!\ng4:hazard: Play a game of hazard!\ng4:guesser: Guess a number between 1 and 10 and try to get the same number that the bot guessed!\ng4:finishit: find out yourself...\ng4:createimage: Create a number to emoji image!\n***---Moderation---***\ng4:kick: kicks a person\ng4:ban: bans a person\n***---Economy---***\ng4:getwallet: Gives you a wallet.\ng4:wallet: Shows you how much GBot Coins do you have.\n``g4:fish``: Want to fish? Use this command!\ng4:dicebet (amount to bet): Bets the ammount you chose and if you get a 1 or a 6, you get the amount you bet.\ng4:roulette (amount to bet): Play the roulette to try and win the bet!...\n***---SocialSphere---***\ng4:ssonlineusers: shows how many users are online on SocialSphere\ng4:sssendmsg: sends a message to someone of your choice... uhh pls use it carefully\ng4:everyssusers: shows every SocialSphere users.\ng4:avatarofssuser (SocialSphere username): shows the avatar of the following user\n***--- GB/PLACE ---***\ng4:gb/place:grid: Shows the gb/place grid\ng4:gb/place:changepixel XXYY C: Change a pixel, XX for the x coordinate of the pixel, YY for the y coordinate of the pixel and C for the color id to change to.')
     elif msg.content == 'g4:ownercmds':
         if msg.author.id in userswithownercmdsperms:
-            await msg.author.send('***---Owner commands---***\ng4:getcoins (coins to get): Gives you the amount of coins that you want.\n***---DANGEROUS COMMANDS---***\ng4:resetchannels: WARNING! This deletes every channels from the server and you cant go back.')
+            await msg.author.send('***---Owner commands---***\ng4:getcoins (coins to get): Gives you the amount of coins that you want.\ng4:gb/place:reset: Resets the whole gb/place grid.\n***---DANGEROUS COMMANDS---***\ng4:resetchannels: WARNING! This deletes every channels from the server and you cant go back.')
         else:
             await msg.channel.send("Oops! Looks like you don't have the permissions to access the owner commands, Sorry!")
     elif msg.content == 'g4:kick':
@@ -542,19 +619,18 @@ async def on_message(msg):
             "avatar": f"./uploads/id{urusernamessthing}10000.webp",
             "content": themsgtosendssthing,
             "identifier": f"id{urusernamessthing}10000",
-            "num": lastnum
+            "num": lastnum,
+            "username": str(private["ssusername"]),
+            "password": str(private["sspassword"])
         }
         # Sending the dictionary as JSON in the request
-        r = requests.post("https://socialsphere.atwebpages.com/add-user-message.php", json=dajson_data)
+        r = requests.post("https://socialsphere.atwebpages.com/add-user-message.php", json=dajson_data, auth=(str(private["ssusername"]), str(private["sspassword"])))
         # Check the response
-        if r.status_code == 200:
-            print(r.content)
-            if json.loads(r.content)["success"] == True:
-                await msg.channel.send("Successfully sent a message.")
-            else:
-                await msg.channel.send(f"An error occurred. Response: {json.loads(r.content)['message']}")
+        print(r.content)
+        if json.loads(r.content)["success"] == True:
+            await msg.channel.send("Successfully sent a message.")
         else:
-            await msg.channel.send(f"Failed to send a message. Status Code: {r.status_code}")
+            await msg.channel.send(f"An error occurred. Response: {json.loads(r.content)['message']}")
     elif resetchannelstypething == True:
         if msg.content == "Y":
             try:
@@ -582,15 +658,5 @@ async def on_message(msg):
             await newlogsline(msg, format(msg.author.name))
     elif channelidthings != [] and serveridthings != []:
         await newlogsline(msg, format(msg.author.name))
-
-@bot.event
-async def on_raw_reaction_add(reaction):
-    if reaction.user_id != 1144229461953368214 and reaction.emoji.name == '🎄':
-        guild = bot.get_guild(925032109595308072)
-        member = guild.get_member(776163922432622603)
-        await member.send(f'**Someone reacted to the Christmas event with the emoji! User: <@{reaction.user_id}>**')
-        guild2 = bot.get_guild(reaction.guild_id)
-        member2 = guild2.get_member(reaction.user_id)
-        await member2.send('**You Won 5,000 Coins! of the Christmas Event! They Will be Given Later, Have a Nice Christmas!**')
 
 bot.run(token=str(private['token']))
